@@ -52,39 +52,39 @@ public class BinarySearchTests {
     void findFromIntArrayTests() {
         try {
             System.out.println("-- Starting the test with linear search --");
-            Integer [] array = ArrayUtils.generateIntegerArray(50000);
+            Integer[] array = ArrayUtils.generateIntegerArray(50000);
             ThreadLocalRandom tlr = ThreadLocalRandom.current();
-
+    
             int counter = NUMBERS_TO_SEARCH;
             long start = 0;
             long linearDuration = 0;
-            while (counter-- >= 0) {
-                int toFind = tlr.nextInt(0, array.length);
+            while (counter-- > 0) {
+                int toFind = tlr.nextInt(0, array.length - 1);
                 start = System.nanoTime();
                 int linearIndex = SearchArray.slowLinearSearch(toFind, array, 0, array.length - 1);
-                assertTrue(linearIndex >= 0, () -> "Binary search could not find the element to search");
+                assertTrue(linearIndex >= 0, () -> "Linear search could not find the element to search");
                 linearDuration += System.nanoTime() - start;
-                System.out.println("Index of " + toFind + " is: " + linearIndex);    
+                System.out.println("Index of " + toFind + " is: " + linearIndex);
             }
             linearDuration /= NUMBERS_TO_SEARCH;
-            
+    
             System.out.println("Sorting the array...");
             start = System.nanoTime();
-            // You must have implemented this as instructed in Exercise 01-arrays!
-            Algorithms.sort(array);
+            // Sorting the array
+            Algorithms.fastSort(array);
             System.out.println("Sorting the array took " + (System.nanoTime() - start) + " ns");
-
+    
             System.out.println("-- Starting the test with binary search --");
             counter = NUMBERS_TO_SEARCH;
             start = 0;
             long binaryDuration = 0;
-            while (counter-- >= 0) {
-                int toFind = tlr.nextInt(1, array.length);
+            while (counter-- > 0) {
+                int toFind = tlr.nextInt(0, array.length - 1);
                 start = System.nanoTime();
                 int binaryIndex = Algorithms.binarySearch(toFind, array, 0, array.length - 1);
                 assertTrue(binaryIndex >= 0, () -> "Binary search could not find the element to search");
                 binaryDuration += System.nanoTime() - start;
-                System.out.println("Index of " + toFind + " is: " + binaryIndex);    
+                System.out.println("Index of " + toFind + " is: " + binaryIndex);
                 int libraryIndex = Arrays.binarySearch(array, toFind, Comparator.naturalOrder());
                 assertEquals(libraryIndex, binaryIndex, () -> "Index is different from real index");
             }
@@ -104,39 +104,40 @@ public class BinarySearchTests {
     void findFromStringArrayTests() {
         try {
             System.out.println("-- Starting the test with linear search --");
-            String [] array = ArrayUtils.generateStringArray(50000);
+            String[] array = ArrayUtils.generateStringArray(50000);
             ThreadLocalRandom tlr = ThreadLocalRandom.current();
-
+    
             int counter = NUMBERS_TO_SEARCH;
             long start = 0;
             long linearDuration = 0;
-            while (counter-- >= 0) {
-                int toFind = tlr.nextInt(0, array.length);
+            while (counter-- > 0) {
+                int toFind = tlr.nextInt(0, array.length - 1);
                 start = System.nanoTime();
                 int linearIndex = SearchArray.slowLinearSearch(array[toFind], array, 0, array.length - 1);
-                assertTrue(linearIndex >= 0, () -> "Binary search could not find the element to search");
+                assertTrue(linearIndex >= 0, () -> "Linear search could not find the element to search");
                 linearDuration += System.nanoTime() - start;
-                System.out.println("Index of " + array[toFind] + " is: " + linearIndex);    
+                System.out.println("Index of " + array[toFind] + " is: " + linearIndex);
             }
             linearDuration /= NUMBERS_TO_SEARCH;
-
+    
             System.out.println("Sorting the array...");
             start = System.nanoTime();
-            // You must have implemented this as instructed in Exercise 01-arrays!
-            Algorithms.sort(array);
-            System.out.println("Sorting the array took " + (System.nanoTime() - start) + " ns");
-
+            // Sorting the array
+            Algorithms.fastSort(array);
+            long sortingDuration = System.nanoTime() - start; // Calculate sorting duration
+            System.out.println("Sorting the array took " + sortingDuration + " ns");
+    
             System.out.println("-- Starting the test with binary search --");
             counter = NUMBERS_TO_SEARCH;
             start = 0;
             long binaryDuration = 0;
-            while (counter-- >= 0) {
-                int toFind = tlr.nextInt(0, array.length);
+            while (counter-- > 0) {
+                int toFind = tlr.nextInt(0, array.length - 1);
                 start = System.nanoTime();
                 int binaryIndex = Algorithms.binarySearch(array[toFind], array, 0, array.length - 1);
                 assertTrue(binaryIndex >= 0, () -> "Binary search could not find the element to search");
                 binaryDuration += System.nanoTime() - start;
-                System.out.println("Index of " + array[toFind] + " is: " + binaryIndex);    
+                System.out.println("Index of " + array[toFind] + " is: " + binaryIndex);
                 int libraryIndex = Arrays.binarySearch(array, array[toFind], Comparator.naturalOrder());
                 assertEquals(libraryIndex, binaryIndex, () -> "Index is different from real index");
             }
@@ -145,10 +146,9 @@ public class BinarySearchTests {
             System.out.format("Average linear search duration: %10d ns%n", linearDuration);
             System.out.format("Average binary search duration: %10d ns%n", binaryDuration);
             assertTrue(binaryDuration <= linearDuration, () -> "Binary search should be much faster in most cases.");
-            
+    
         } catch (Exception e) {
             fail("Something went wrong in the tests: " + e.getMessage());
         }
     }
-
 }

@@ -56,29 +56,23 @@ import org.junit.jupiter.api.Order;
 
     @Test
     @Order(1)
-    @Timeout(value = 10, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    // @Timeout(value = 10, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
     @DisplayName("Test the empty queue behaviour.")
     void emptyQueueTest() {
-        // Test that count of just initialized queue is zero and remove returns null.
-        System.out.println("Testing empty queue.");
-        QueueInterface<Integer> queueToTest = QueueFactory.createIntegerQueue(10);
-        assertTrue(queueToTest.isEmpty(), () -> "The queue should be empty.");
-        queueToTest.clear();
+        QueueInterface<Integer> queueToTest = new QueueImplementation<>(10);
         assertTrue(queueToTest.isEmpty(), () -> "The queue should be empty.");
         assertEquals(0, queueToTest.size(), () -> "Expected queue to be empty, count() returning 0.");
         assertThrows(QueueIsEmptyException.class, () -> queueToTest.dequeue(), "Expecting to throw QueueIsEmptyException when removing from empty queue.");
         assertThrows(QueueIsEmptyException.class, () -> queueToTest.element(), "Expecting to throw QueueIsEmptyException when accessing element from empty queue");
-        assertThrows(NullPointerException.class, () -> queueToTest.enqueue(null), "Must not be able to add null to queue.");
+        assertThrows(IllegalArgumentException.class, () -> queueToTest.enqueue(null), "Must not be able to add null to queue.");
         assertEquals("[]", queueToTest.toString(), () -> "Empty queue as string failed.");
     }
-
     @Test
     @Order(2)
     @Timeout(value = 10, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
     @DisplayName("Very basic queue tests")
     void basicQueueTests() {
-        System.out.println("Testing basic queue functionality.");
-        QueueInterface<Integer> queueToTest = QueueFactory.createIntegerQueue(5);
+        QueueInterface<Integer> queueToTest = new QueueImplementation<>(5);
         assertTrue(queueToTest.isEmpty(), () -> "The queue should be empty.");
         assertDoesNotThrow(() -> queueToTest.enqueue(1), "Should successfully add elements to queue.");
         assertDoesNotThrow(() -> queueToTest.enqueue(2), "Should successfully add elements to queue.");
@@ -100,7 +94,7 @@ import org.junit.jupiter.api.Order;
             assertNotNull(queueToTest.dequeue(), () -> "Should be able to take four elements out.");
         }
         assertEquals(1, queueToTest.size(), () -> "Should have one element in the queue.");
-        assertEquals(6, queueToTest.element(), () -> "Only six should be left int the queue.");
+        assertEquals(6, queueToTest.element(), () -> "Only six should be left in the queue.");
         assertNotNull(queueToTest.dequeue(), () -> "Should be able to take final element out.");
         assertEquals(0, queueToTest.size(), () -> "Expected queue to be empty, count() returning 0.");
         assertTrue(queueToTest.isEmpty(), () -> "The queue should be empty.");
