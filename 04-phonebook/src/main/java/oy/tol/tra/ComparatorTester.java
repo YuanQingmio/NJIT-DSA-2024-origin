@@ -32,5 +32,20 @@ public class ComparatorTester {
 		Algorithms.sortWithComparator(array, new DescendingPersonComparator());
 		System.out.println(Arrays.toString(array));
 	}
-
+	public static <T> void sortWithComparator(T[] array, Comparator<? super T> comparator) {
+        int n = array.length;
+        boolean sorted;
+        do {
+            sorted = false;
+            for (int j = 1; j < n; j++) {
+                if (comparator.compare(array[j], array[j - 1]) < 0) {
+                    T tmp = array[j];
+                    array[j] = array[j - 1];
+                    array[j - 1] = tmp;
+                    sorted = true;
+                }
+            }
+            n--;
+        } while (sorted);
+    }
 }

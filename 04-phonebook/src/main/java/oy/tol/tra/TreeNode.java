@@ -133,4 +133,14 @@ class TreeNode<K extends Comparable<K>, V> {
       }
       return true;
    }
+
+public TreeNode<K, V> getLeft() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getLeft'");
+}
+
+public boolean add(K key, V value) {
+   // TODO Auto-generated method stub
+   throw new UnsupportedOperationException("Unimplemented method 'add'");
+}
 }
